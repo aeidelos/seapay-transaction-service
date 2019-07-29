@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package sea.wallet;
+
+option java_multiple_files = true;
+option java_package = "io.sea.grpc.wallet";
+option java_outer_classname = "WalletProto";
+
+service Wallet {
+    rpc PostTransaction (PostTransactionRequest) returns (PostTransactionResponse) {}
+}
+
+message PostTransactionRequest {
+    string fromId = 1;
+    string toId = 2;
+    float value = 3;
+}
+
+message PostTransactionResponse {
+    bool success = 1;
+    string error = 2;
+}

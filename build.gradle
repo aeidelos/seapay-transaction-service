@@ -1,3 +1,12 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.8'
+    }
+}
+
 plugins {
     id 'org.springframework.boot' version '2.1.6.RELEASE'
     id 'java'
@@ -15,5 +24,36 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'io.grpc:grpc-netty-shaded:1.22.1'
+    implementation 'io.grpc:grpc-protobuf:1.22.1'
+    implementation 'io.grpc:grpc-stub:1.22.1'
+    implementation 'com.google.protobuf:protobuf-java:3.9.0'
+    compileOnly "javax.annotation:javax.annotation-api:1.2"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+apply plugin: 'com.google.protobuf'
+apply plugin: 'idea'
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.9.0"
+    }
+    plugins {
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.22.1'
+        }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+        }
+    }
+}
+
+idea {
+    module {
+        sourceDirs += file("${projectDir}/src/generated/main/java");
+        sourceDirs += file("${projectDir}/src/generated/main/grpc");
+    }
 }
