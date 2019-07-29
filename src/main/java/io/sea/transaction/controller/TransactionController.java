@@ -31,6 +31,7 @@ public class TransactionController {
             Transaction result = transactionService.createTransaction(senderId, receiverId, amount);
             response = new ResponseTemplate<>(result, true, ErrorTemplate.blankErrorTemplate());
         } catch (InterruptedException | RuntimeException e) {
+            e.printStackTrace();
             response = new ResponseTemplate<>(null, false, new ErrorTemplate(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), ERROR_TITLE));
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
